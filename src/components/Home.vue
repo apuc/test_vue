@@ -1,76 +1,24 @@
 <template>
   <div class="home" v-click-outside="hideInputAndSave">
-    <div class="control-wrap">
-      <button class="control-span"
-              v-if="!isInputActive"
-              @click="swithInputState"
-      >
-        {{makeSpaces}}
-      </button>
-
-      <div class="input-wrap">
-        <input type="text"
-               v-show="isInputActive"
-               ref="inputController"
-               v-model="inputValue"
-               @input="deleteNonNumber($event.target.value)"
-               @keyup.esc="swithInputState"
-               @keyup.enter="hideInputAndSave"
-        >
-
-        <button type="button" class="increment">
-          +
-        </button>
-
-        <button type="button" class="decrement">
-          +
-        </button>
-      </div>
-    </div>
-
+    <ContolInput v-for="(control, index) in controls" :key="control.title + index"
+                 :value="control.value"
+                 :helper="control.helper"
+                 :index="index"
+    />
   </div>
 </template>
 
 <script>
   import {mapGetters, mapMutations} from 'vuex';
+  import ContolInput from "./ContolInput";
 
 export default {
   name: 'home',
-  data() {
-    return {
-      isInputActive: false,
-      inputValue: 0,
-    }
-  },
+  components: {ContolInput},
   computed: {
     ...mapGetters({
-      control: 'control',
-    }),
-    makeSpaces() {
-      return this.control.replace(/[^0-9.]/g,'').replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-    }
-  },
-  methods: {
-    ...mapMutations({
-      changeControlState: 'CHANGE_CONTROL_STATE',
-    }),
-    swithInputState(e) {
-      this.isInputActive = !this.isInputActive;
-      this.inputValue = this.control;
-      this.inputValue.split(' ');
-      this.$refs.inputController.select();
-      this.$refs.inputController.focus();
-    },
-    // selectValue(e) {
-    //   e.target.select();
-    // },
-    deleteNonNumber(value) {
-      this.inputValue = value.replace(/[^0-9.]/g,'');
-    },
-    hideInputAndSave() {
-      this.changeControlState(this.inputValue);
-      this.isInputActive = !this.isInputActive;
-    }
+      controls: 'controls',
+    })
   },
   directives: {
     'click-outside': {
@@ -103,44 +51,9 @@ export default {
 
       }
     }
-  }
+  },
 }
 </script>
 
 <style scoped>
-  .control-span {
-    position: relative;
-    z-index: 1;
-
-    padding: 5px 10px;
-
-    background-color: transparent;
-    border: 0;
-    cursor: pointer;
-  }
-
-  .control-span::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 50%;
-
-    display: block;
-    width: 5px;
-    height: 5px;
-
-    transform: translateY(-50%) rotate(-45deg);
-    border: 1px solid;
-    border-top: none;
-    border-right: none;
-  }
-
-  .input-wrap {
-    position: relative;
-    z-index: -1;
-  }
-
-  .increment {
-
-  }
 </style>

@@ -5,14 +5,37 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    control: 0
+    controls: [
+      {
+        value: 0,
+        title:  'Контроллер',
+        helper:{
+          title: 'Сумма',
+          // calculate() {}
+        }
+      },
+      {
+        value: 0,
+        title:  'Контроллер',
+        helper:{
+          title: 'Константа',
+          // calculate() {}
+        }
+      },
+      {
+        value: 0,
+        title:  'Контроллер',
+      },
+
+    ],
   },
   getters: {
-    control: state => state.control
+    controls: state => state.controls,
+    // helper: state => state.helper,
   },
   mutations: {
-    'CHANGE_CONTROL_STATE': (state, controlValue) => {
-      state.control = controlValue;
+    'CHANGE_CONTROL_STATE': (state, data) => {
+      state.controls[data.index] = data.value;
     }
   },
   actions: {
