@@ -1,5 +1,7 @@
 <template>
   <div class="home">
+    <h1 class="title">Три взаимодействующих контрола</h1>
+
     <ContolInput v-for="(control, index) in controls"
                  :key="control.title + index"
                  :index="index"
@@ -30,4 +32,16 @@ export default {
 </script>
 
 <style scoped>
+  .home {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .title {
+    max-width: 300px;
+    font-size: 24px;
+    font-weight: normal;
+  }
 </style>

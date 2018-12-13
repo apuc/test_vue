@@ -35,7 +35,6 @@ export default new Vuex.Store({
   },
   getters: {
     controls: state => state.controls,
-    // helper: state => state.helper,
   },
   mutations: {
     'CHANGE_CONTROL_VALUE': (state, data) => {

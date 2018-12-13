@@ -3,14 +3,16 @@
     <span class="control-title">{{currentControl.title}} {{index}}</span>
 
     <button class="control-btn"
-            v-if="!currentControl.isActive"
+            v-show="!currentControl.isActive"
             @click="switchInputState"
     >
-      {{makeSpaces}}
+      <span class="control-btn__text">{{makeSpaces}}</span>
+      <img src="../assets/icons/down.svg" width="6" alt="">
     </button>
 
     <div class="input-wrap" v-show="currentControl.isActive">
       <input type="text"
+             class="input"
              ref="myInput"
              v-model="inputValue"
              @input="writeDigits($event.target.value)"
@@ -19,6 +21,14 @@
              @keydown.tab.prevent="tabStep"
       >
 
+      <button type="button" class="increment" @click="increment">
+        <img src="../assets/icons/input_up.svg" width="8" alt="">
+      </button>
+
+      <button type="button" class="decrement" @click="decrement">
+        <img src="../assets/icons/input_down.svg" width="8" alt="">
+      </button>
+
       <button type="button"
               class="helper"
               v-if="currentControl.helper"
@@ -26,10 +36,6 @@
       >
         {{helperTitle}}
       </button>
-
-      <button type="button" class="increment" @click="increment"></button>
-
-      <button type="button" class="decrement" @click="decrement"></button>
     </div>
   </div>
 </template>
@@ -92,27 +98,28 @@
         })
       },
       writeDigits(value) {
-        console.log(123);
         this.inputValue = value.replace(/[^0-9.]/g,'');
       },
       hideInputAndSave() {
-        this.isActivated = false;
-        this.changeControlState({
-          value: this.inputValue,
-          index: this.index,
-        });
+        if (this.currentControl.isActive) {
+          if (this.currentControl.name === 'model') {
+            this.bindConrollersValue({
+              name: 'model',
+              value: this.inputValue,
+              index: this.index
+            })
+          }
 
-        this.changeControlStatus({
-          isActive: false,
-          index: this.index
-        });
-
-        if (this.currentControl.name === 'model') {
-          this.bindConrollersValue({
-            name: 'model',
+          this.isActivated = false;
+          this.changeControlState({
             value: this.inputValue,
+            index: this.index,
+          });
+
+          this.changeControlStatus({
+            isActive: false,
             index: this.index
-          })
+          });
         }
       },
       increment() {
@@ -146,7 +153,6 @@
             index: this.index
           });
         }
-
       }
     },
     directives: {
@@ -194,38 +200,38 @@
   .control-wrap {
     display: flex;
     align-items: center;
+    margin-top: 40px;
   }
 
   .control-title {
-    font-size: 14px;
-    color: #b2b2b2;
+    margin-right: 50px;
+
+    font-size: 15px;
+    color: #999999;
+  }
+
+  .input,
+  .control-btn {
+    width: 116px;
+    height: 30px;
+    padding: 5px 10px;
+    box-sizing: border-box;
   }
 
   .control-btn {
     position: relative;
     z-index: 1;
 
-    padding: 5px 10px;
+    display: flex;
+    justify-content: flex-start;
 
     background-color: transparent;
     border: 0;
     cursor: pointer;
   }
 
-  .control-btn::after {
-    content: '';
-    position: absolute;
-    right: 0;
-    top: 50%;
-
-    display: block;
-    width: 5px;
-    height: 5px;
-
-    transform: translateY(-50%) rotate(-45deg);
-    border: 1px solid;
-    border-top: none;
-    border-right: none;
+  .control-btn__text {
+    margin-right: 6px;
   }
 
   .input-wrap {
@@ -237,50 +243,41 @@
     align-items: flex-start;
   }
 
+  .input {
+    background-color: #fafafa;
+    border: 1px solid #DDDDDD;
+  }
+
   .increment,
   .decrement {
     position: absolute;
-    top: 0;
-    right: 0;
+    top: 3px;
+    right: 10px;
     z-index: 2;
 
-    padding: 3px;
+    padding: 0;
 
     line-height: 1;
-  }
 
-  .increment::before,
-  .decrement::before {
-    content: '';
-    position: absolute;
-    left: 0;
-
-
-    display: block;
-    width: 5px;
-    height: 5px;
-
-    transform: translateY(-50%) rotate(-45deg);
-    border: 1px solid;
-    border-top: none;
-    border-right: none;
-  }
-
-  .increment::before {
-    border: 1px solid;
-    border-bottom: none;
-    border-left: none;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
   }
 
   .decrement {
-    top: 10px;
+    top: auto;
+    bottom: 3px;
   }
 
   .helper {
+    position: absolute;
+    bottom: -12px;
+    z-index: 1;
+
     padding: 0;
 
-    font-size: 12px;
-    color: #65b5f5;
+    font-size: 11px;
+    color: #42A4F4;
 
     background-color: transparent;
     border: none;
