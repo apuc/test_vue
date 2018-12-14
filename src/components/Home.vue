@@ -2,7 +2,7 @@
   <div class="home">
     <h1 class="title">Три взаимодействующих контрола</h1>
 
-    <ContolInput v-for="(control, index) in controls"
+    <Control v-for="(control, index) in controls"
                  :key="control.title + index"
                  :index="index"
     />
@@ -11,11 +11,11 @@
 
 <script>
   import {mapGetters} from 'vuex';
-  import ContolInput from "./ContolInput";
+  import Control from "./Control";
 
 export default {
   name: 'home',
-  components: {ContolInput},
+  components: {Control},
   data() {
     return {
     }
